@@ -16,8 +16,8 @@ maximum_range = 1
 
 # Функція генератора стаціонарного випадкового сигналу
 def stat_random_signal(n, W):
-    A = [random.random() for _ in range(n)]
-    phi = [random.random() for _ in range(n)]
+    A = [round(random.random(), 3) for _ in range(n)]
+    phi = [round(random.random(), 3) for _ in range(n)]
 
     def f(t):
         x = 0
@@ -36,12 +36,23 @@ dft = np.fft.fft(s)
 # Функція для обчислення Дискретного перетворення Фур'є
 def dft(x):
     t = []
+    matrix = []
     N_ = len(x)
     for k in range(N_):
         a = 0
-        for n_ in range(N):
-            a += x[n_]*cmath.exp(-2j*cmath.pi*k*n_*(1/N_))
+        temp = []
+        for p in range(N):  # n_
+            # a += x[n_]*cmath.exp(-2j*cmath.pi*k*n_*(1/N_))
+            W = cmath.cos((2*cmath.pi*p*k)/N)-1j*cmath.sin((2*cmath.pi*p*k)/N)
+            a += x[p]*W
+            temp.append(W)
+        matrix.append(temp)
         t.append(a)
+    # Таблиця коефіцієнтів
+    print(np.array(matrix[1][1:4]).real, "... ", np.array(matrix[1][-1]).real)
+    print(np.array(matrix[2][1:4]).real, "... ", np.array(matrix[2][-1]).real)
+    print('...')
+    print(np.array(matrix[-1][1:4]).real, "... ", np.array(matrix[-1][-1]).real)
     return t
 
 
